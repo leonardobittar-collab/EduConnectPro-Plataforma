@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduConnect - Plataforma de Mentorias</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Tela de Login/Cadastro -->
+    <div id="auth-screen" class="screen active">
+        <div class="auth-container">
+            <div class="auth-header">
+                <h1><i class="fas fa-graduation-cap"></i> EduConnect</h1>
+                <p>Conectando mentores e alunos</p>
+            </div>
+            
+            <div class="auth-tabs">
+                <button class="tab-btn active" data-tab="login">Login</button>
+                <button class="tab-btn" data-tab="register">Cadastro</button>
+            </div>
+            
+            <!-- Formulário de Login -->
+            <form id="login-form" class="auth-form active">
+                <div class="form-group">
+                    <label for="login-email">E-mail</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Senha</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Entrar</button>
+                <div class="form-message" id="login-message"></div>
+            </form>
+            
+            <!-- Formulário de Cadastro -->
+            <form id="register-form" class="auth-form">
+                <div class="form-group">
+                    <label for="register-name">Nome Completo</label>
+                    <input type="text" id="register-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">E-mail</label>
+                    <input type="email" id="register-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Senha</label>
+                    <input type="password" id="register-password" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-type">Tipo de Usuário</label>
+                    <select id="register-type" required>
+                        <option value="">Selecione</option>
+                        <option value="student">Aluno</option>
+                        <option value="mentor">Mentor</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+                <div class="form-message" id="register-message"></div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Dashboard Principal -->
+    <div id="main-screen" class="screen">
+        <!-- Navegação -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fas fa-graduation-cap"></i>
+                <span>EduConnect</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#" data-section="dashboard" class="nav-link active">Dashboard</a></li>
+                <li><a href="#" data-section="mentors" class="nav-link">Mentores</a></li>
+                <li><a href="#" data-section="groups" class="nav-link">Grupos</a></li>
+                <li><a href="#" data-section="materials" class="nav-link">Materiais</a></li>
+                <li><a href="#" data-section="profile" class="nav-link">Perfil</a></li>
+            </ul>
+            <div class="nav-user">
+                <span id="user-name"></span>
+                <button id="logout-btn" class="btn btn-outline">Sair</button>
+            </div>
+        </nav>
+        
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            <!-- Dashboard -->
+            <section id="dashboard-section" class="content-section active">
+                <div class="dashboard-header">
+                    <h2>Bem-vindo ao EduConnect</h2>
+                    <p>Gerencie suas mentorias e grupos de estudo</p>
+                </div>
+                
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Próximas Mentorias</h3>
+                            <div id="upcoming-sessions"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Meus Grupos</h3>
+                            <div id="my-groups"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Materiais Recentes</h3>
+                            <div id="recent-materials"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Seção de Mentores -->
+            <section id="mentors-section" class="content-section">
+                <div class="section-header">
+                    <h2>Encontre um Mentor</h2>
+                    <div class="search-bar">
+                        <input type="text" id="mentor-search" placeholder="Buscar por nome ou área...">
+                        <button id="search-btn"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+                
+                <div class="mentors-grid" id="mentors-grid"></div>
+            </section>
+            
+            <!-- Seção de Grupos -->
+            <section id="groups-section" class="content-section">
+                <div class="section-header">
+                    <h2>Grupos de Estudo</h2>
+                    <button id="create-group-btn" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Criar Grupo
+                    </button>
+                </div>
+                
+                <div class="groups-grid" id="groups-grid"></div>
+            </section>
+            
+            <!-- Seção de Materiais -->
+            <section id="materials-section" class="content-section">
+                <div class="section-header">
+                    <h2>Materiais de Estudo</h2>
+                    <button id="upload-material-btn" class="btn btn-primary">
+                        <i class="fas fa-upload"></i> Upload Material
+                    </button>
+                </div>
+                
+                <div class="materials-list" id="materials-list"></div>
+            </section>
+            
+            <!-- Seção de Perfil -->
+            <section id="profile-section" class="content-section">
+                <div class="profile-container">
+                    <h2>Meu Perfil</h2>
+                    <div id="profile-content"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <!-- Modais -->
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal" id="mentor-modal">
+            <div class="modal-header">
+                <h3 id="modal-mentor-name"></h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="mentor-modal-body"></div>
+        </div>
+        
+        <div class="modal" id="schedule-modal">
+            <div class="modal-header">
+                <h3>Agendar Mentoria</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="schedule-form">
+                    <div class="form-group">
+                        <label for="schedule-date">Data</label>
+                        <input type="date" id="schedule-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="schedule-time">Horário</label>
+                        <select id="schedule-time" required>
+                            <option value="">Selecione</option>
+                            <option value="09:00">09:00</option>
+                            <option value="10:00">10:00</option>
+                            <option value="11:00">11:00</option>
+                            <option value="14:00">14:00</option>
+                            <option value="15:00">15:00</option>
+                            <option value="16:00">16:00</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Confirmar Agendamento</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="modal" id="group-modal">
+            <div class="modal-header">
+                <h3 id="group-modal-title">Criar Grupo de Estudo</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="group-form">
+                    <div class="form-group">
+                        <label for="group-name">Nome do Grupo</label>
+                        <input type="text" id="group-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="group-description">Descrição</label>
+                        <textarea id="group-description" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="group-submit-btn">Criar Grupo</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="modal" id="group-manage-modal">
+            <div class="modal-header">
+                <h3 id="manage-group-name">Gerenciar Grupo</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="participant-management">
+                    <h4>Participantes Atuais</h4>
+                    <div id="current-participants" class="participants-list"></div>
+                    
+                    <h4>Adicionar Participantes</h4>
+                    <div class="form-group">
+                        <label for="participant-search">Buscar usuários</label>
+                        <input type="text" id="participant-search" placeholder="Digite o nome do usuário...">
+                    </div>
+                    <div id="available-users" class="participants-list"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal" id="material-modal">
+            <div class="modal-header">
+                <h3>Upload de Material</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="material-form">
+                    <div class="form-group">
+                        <label for="material-name">Nome do Material</label>
+                        <input type="text" id="material-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="material-description">Descrição</label>
+                        <textarea id="material-description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="material-file">Arquivo (simulado)</label>
+                        <input type="file" id="material-file" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/app.js"></script>
+</body>
+</html>
